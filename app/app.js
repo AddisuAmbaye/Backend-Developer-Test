@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import { globalErrorHandler, notFound } from "../middlewares/globalErrorHandler.js"
 import userRoutes from "../routes/userRoutes.js"
 import projectRoutes from "../routes/projectRoutes.js"
+import taskRoutes from "../routes/taskRoutes.js"
 import cors from "cors"
 import path from "path"
 import morgan from "morgan"
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 // routes
 app.use('/api/auth', userRoutes)
 app.use('/api/projects', projectRoutes)
+app.use('/api/tasks', taskRoutes)
 //err middleware
 app.use(notFound)
 app.use(globalErrorHandler) 

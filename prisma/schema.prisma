@@ -14,7 +14,8 @@ model User {
   email     String   @unique
   password  String
   created_at DateTime @default(now())
-  // Define the relationships
+  isAdmin   Boolean  @default(false)
+
   projects  Project[]
   tasks     Task[]
 }

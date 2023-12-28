@@ -10,19 +10,13 @@ import { isLoggedIn } from '../middlewares/isLoggedIn.js'
 
 const taskRouter = express.Router();
 
-// Create a new task within a project
-taskRouter.post('/projects/:projectId/tasks', isLoggedIn, createTaskForProjectCtrl)
-
-// Fetch all tasks for a specific project
-taskRouter.get('/projects/:projectId/tasks', isLoggedIn, getAllTasksForProjectCtrl)
-
 // Fetch a specific task by ID
-taskRouter.get('/tasks/:taskId', isLoggedIn, getTaskByIdCtrl)
+taskRouter.get('/:taskId', isLoggedIn, getTaskByIdCtrl)
 
 // Update a specific task by ID
-taskRouter.put('/tasks/:taskId', isLoggedIn, updateTaskByIdCtrl)
+taskRouter.put('/:taskId', isLoggedIn, updateTaskByIdCtrl)
 
 // Delete a specific task by ID
-taskRouter.delete('/tasks/:taskId', isLoggedIn, deleteTaskByIdCtrl)
+taskRouter.delete('/:taskId', isLoggedIn, deleteTaskByIdCtrl)
 
 export default taskRouter

@@ -3,30 +3,35 @@ import asyncHandler from 'express-async-handler'
 
 // Create a new task within a project
 export const createTaskForProjectCtrl = asyncHandler(async (req, res) => {
-    const projectId = parseInt(req.params.projectId, 10)
-    const { title, description, due_date } = req.body
-    const userId = req.userAuth;
-  
-    const newTask = await prisma.task.create({
-      data: {
-        title,
-        description,
-        due_date,
-        project: {
-          connect: { id: projectId },
-        },
-        user: {
-          connect: { id: userId },
-        },
-      },
-    })
-  
-    res.status(201).json({
-      status: 'success',
-      message: 'Task created successfully',
-      task: newTask,
-    })
-  })
+        const projectId = parseInt(req.params.projectId, 10)
+        const { title, description, due_date } = req.body
+        const userId = req.userAuth
+    
+        if (!title) {
+            res.status(400).json({ error: 'Title is required' });
+            return;
+        }
+    
+        const newTask = await prisma.task.create({
+            data: {
+                title,
+                description,
+                due_date: new Date("2023-12-31").toISOString(),
+                project: {
+                    connect: { id: projectId },
+                },
+                user: {
+                    connect: { id: userId },
+                },
+            },
+        });
+    
+        res.status(201).json({
+            status: 'success',
+            message: 'Task created successfully',
+            task: newTask,
+        })
+})
   
 // Fetch all tasks for a specific project
 export const getAllTasksForProjectCtrl = asyncHandler(async (req, res) => {
@@ -55,7 +60,7 @@ export const getTaskByIdCtrl = asyncHandler(async (req, res) => {
   const task = await prisma.task.findUnique({
     where: {
       id: taskId,
-      user_id: userId,
+      user_id: userId, 
     },
   })
 
