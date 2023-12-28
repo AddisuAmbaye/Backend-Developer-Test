@@ -45,7 +45,9 @@ export const registerUserCtrl = asyncHandler(async(req, res) => {
   
       // Return the newly created user (excluding the password)
       res.status(201).json({
-        id: newUser.id,
+        status: "success",
+        message: "User Registered Successfully",
+        id: newUser.id, 
         username: newUser.username,
         email: newUser.email,
         created_at: newUser.created_at,
