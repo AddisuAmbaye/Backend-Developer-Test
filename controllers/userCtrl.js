@@ -1,8 +1,9 @@
 import asyncHandler from "express-async-handler";
 import prisma from "../config/db.js";
 import bcrypt from 'bcrypt';
+import generateToken from "../utils/generateToken.js";
 
-export const registerUser = asyncHandler(async(req, res) => {
+export const registerUserCtrl = asyncHandler(async(req, res) => {
     
     const { username, email, password } = req.body;
   
@@ -53,5 +54,25 @@ export const registerUser = asyncHandler(async(req, res) => {
       console.error(error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
-  })
+ })
+
+export const loginUserCtrl = asyncHandler(async(req, res) => {
+  const { username, password } = req.body;
+
+  // Find the user in the database by email
+  const userFound = await prisma.user.findUnique({
+    where: { username },
+  });
+
+  if (userFound && (await bcrypt.compare(password, userFound?.password))) {
+    res.json({
+      status: 'success',
+      message: 'User logged in successfully',
+      userFound,
+      token: generateToken(userFound?.id),
+    });
+  } else {
+    throw new Error('Invalid login credentials');
+  }
+})
 

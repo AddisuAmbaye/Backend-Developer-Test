@@ -1,9 +1,10 @@
 import express from 'express';
-import { registerUser } from '../controllers/userCtrl.js';
+import { registerUser, loginUserCtrl } from '../controllers/userCtrl.js';
 
 const userRouter = express.Router();
 
 // Define the user registration route
-userRouter.post('/register', registerUser);
+userRouter.post('/register', registerUserCtrl);
+userRouter.post("/login", loginUserCtrl);
 
 export default userRouter;
