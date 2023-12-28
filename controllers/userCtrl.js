@@ -1,20 +1,19 @@
 import asyncHandler from "express-async-handler";
-import { PrismaClient } from '@prisma/client';
+import prisma from "../config/db.js";
 import bcrypt from 'bcrypt';
 
-const prisma = new PrismaClient();
-
 export const registerUser = asyncHandler(async(req, res) => {
+    console.log(req.body);
     const { username, email, password } = req.body;
   
-    // Check if username and email are provided
+    //Check if username and email are provided
     if (!username || !email || !password) {
       return res.status(400).json({ error: 'Username, email, and password are required' });
     }
   
-    // Hash the password
+    //Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-  
+
     try {
       // Check if the username is already taken
       const existingUsername = await prisma.user.findUnique({
