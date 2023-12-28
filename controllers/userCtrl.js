@@ -3,7 +3,7 @@ import prisma from "../config/db.js";
 import bcrypt from 'bcrypt';
 
 export const registerUser = asyncHandler(async(req, res) => {
-    console.log(req.body);
+    
     const { username, email, password } = req.body;
   
     //Check if username and email are provided
