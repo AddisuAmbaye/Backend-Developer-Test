@@ -5,7 +5,7 @@ import {
     deleteTaskByIdCtrl,
 } from '../controllers/taskCtrl.js';
 import { isLoggedIn } from '../middlewares/isLoggedIn.js'
-import { ownsTask } from './authMiddleware.js'
+import { ownsTask } from '../middlewares/authMiddleware.js'
 
 const taskRouter = express.Router();
 

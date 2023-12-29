@@ -5,7 +5,7 @@ import generateToken from "../utils/generateToken.js";
 
 export const registerUserCtrl = asyncHandler(async(req, res) => {
     
-    const { username, email, password } = req.body;
+    const { username, email, password, isAdmin } = req.body;
   
     //Check if username and email are provided
     if (!username || !email || !password) {
@@ -39,6 +39,7 @@ export const registerUserCtrl = asyncHandler(async(req, res) => {
         data: {
           username,
           email,
+          isAdmin,
           password: hashedPassword,
         },
       });
@@ -50,6 +51,7 @@ export const registerUserCtrl = asyncHandler(async(req, res) => {
         id: newUser.id, 
         username: newUser.username,
         email: newUser.email,
+        isAdmin: newUser.isAdmin,
         created_at: newUser.created_at,
       });
     } catch (error) {

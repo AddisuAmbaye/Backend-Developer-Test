@@ -11,7 +11,7 @@ import {
     getAllTasksForProjectCtrl,
 } from '../controllers/taskCtrl.js';
 import { isLoggedIn } from '../middlewares/isLoggedIn.js'
-import { ownProject } from './middlewares/authMiddleware.js'
+import { ownsProject } from '../middlewares/authMiddleware.js'
 
 const projectRouter = express.Router()
 
@@ -19,22 +19,23 @@ const projectRouter = express.Router()
 projectRouter.post('/', isLoggedIn, createProjectCtrl)
 
 // Fetch all projects for the authenticated user
-projectRouter.get('/', isLoggedIn, ownProject, getAllProjectsCtrl)
-
-// Create a new task within a project
-projectRouter.post('/:projectId/tasks', isLoggedIn, ownProject, createTaskForProjectCtrl)
-
-// Fetch all tasks for a specific project
-projectRouter.get('/:projectId/tasks', isLoggedIn, ownProject, getAllTasksForProjectCtrl)
+projectRouter.get('/', isLoggedIn, ownsProject, getAllProjectsCtrl)
 
 // Fetch a specific project by ID
-projectRouter.get('/:projectId', isLoggedIn, ownProject, getProjectByIdCtrl)
+projectRouter.get('/:projectId', isLoggedIn, ownsProject, getProjectByIdCtrl)
 
 // Update a specific project by ID
-projectRouter.put('/:projectId', isLoggedIn,ownProject, updateProjectByIdCtrl)
-
+projectRouter.put('/:projectId', isLoggedIn, ownsProject, updateProjectByIdCtrl)
+ 
 // Delete a specific project by ID
-projectRouter.delete('/:projectId', isLoggedIn, ownProject, deleteProjectByIdCtrl)
+projectRouter.delete('/:projectId', isLoggedIn, ownsProject, deleteProjectByIdCtrl) 
+
+// Create a new task within a project
+projectRouter.post('/:projectId/tasks', isLoggedIn, ownsProject, createTaskForProjectCtrl)
+
+// Fetch all tasks for a specific project
+projectRouter.get('/:projectId/tasks', isLoggedIn, ownsProject, getAllTasksForProjectCtrl)
+
 
 export default projectRouter
  
