@@ -5,33 +5,33 @@ import generateToken from "../utils/generateToken.js";
 
 export const registerUserCtrl = asyncHandler(async(req, res) => {
     
-    const { username, email, password, isAdmin } = req.body;
+    const { username, email, password, isAdmin } = req.body
   
     //Check if username and email are provided
     if (!username || !email || !password) {
-      return res.status(400).json({ error: 'Username, email, and password are required' });
+      return res.status(400).json({ error: 'Username, email, and password are required' })
     }
   
     //Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10)
 
     try {
       // Check if the username is already taken
       const existingUsername = await prisma.user.findUnique({
-        where: { username },
-      });
+        where: { username }
+      })
   
       if (existingUsername) {
-        return res.status(400).json({ error: 'Username is already taken' });
+        return res.status(400).json({ error: 'Username is already taken' })
       }
   
       // Check if the email is already registered
       const existingEmail = await prisma.user.findUnique({
-        where: { email },
-      });
+        where: { email }
+      })
   
       if (existingEmail) {
-        return res.status(400).json({ error: 'Email is already registered' });
+        return res.status(400).json({ error: 'Email is already registered' })
       }
   
       // Create a new user in the database
@@ -40,9 +40,9 @@ export const registerUserCtrl = asyncHandler(async(req, res) => {
           username,
           email,
           isAdmin,
-          password: hashedPassword,
-        },
-      });
+          password: hashedPassword
+        }
+      })
   
       // Return the newly created user (excluding the password)
       res.status(201).json({
@@ -52,31 +52,29 @@ export const registerUserCtrl = asyncHandler(async(req, res) => {
         username: newUser.username,
         email: newUser.email,
         isAdmin: newUser.isAdmin,
-        created_at: newUser.created_at,
-      });
+        created_at: newUser.created_at
+      })
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: 'Internal Server Error' })
     }
  })
 
 export const loginUserCtrl = asyncHandler(async(req, res) => {
-  const { username, password } = req.body;
+  const { username, password } = req.body
 
-  // Find the user in the database by email
+  // Find the user in the database by username
   const userFound = await prisma.user.findUnique({
-    where: { username },
-  });
+    where: { username }
+  })
 
   if (userFound && (await bcrypt.compare(password, userFound?.password))) {
-    res.json({
+    res.status(200).json({
       status: 'success',
       message: 'User logged in successfully',
       userFound,
-      token: generateToken(userFound?.id),
-    });
+      token: generateToken(userFound?.id)
+    })
   } else {
-    throw new Error('Invalid login credentials');
+    res.status(401).json({ error: 'Invalid login credentials' })
   }
 })
-

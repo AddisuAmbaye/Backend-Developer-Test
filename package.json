@@ -9,14 +9,21 @@
   },
   "scripts": {
     "start": "node server.js",
-    "server": "nodemon server.js"
+    "server": "nodemon server.js",
+    "test": "jest"
   },
   "author": "addisu ambaye",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.23.6",
+    "@babel/preset-env": "^7.23.6",
+    "babel-jest": "^29.7.0",
     "dotenv": "^16.3.1",
+    "esm": "^3.2.25",
+    "jest": "^29.7.0",
     "morgan": "^1.10.0",
-    "prisma": "^5.7.1"
+    "prisma": "^5.7.1",
+    "supertest": "^6.3.3"
   },
   "dependencies": {
     "@prisma/client": "^5.7.1",

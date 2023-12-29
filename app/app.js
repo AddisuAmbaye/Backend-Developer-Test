@@ -5,7 +5,6 @@ import userRoutes from "../routes/userRoutes.js"
 import projectRoutes from "../routes/projectRoutes.js"
 import taskRoutes from "../routes/taskRoutes.js"
 import cors from "cors"
-import path from "path"
 import morgan from "morgan"
 dotenv.config()
 
@@ -18,12 +17,6 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('combined'))
 
-//serve static files
-app.use(express.static("public"))
-//Home route
-app.get("/", (req, res) => {
-  res.sendFile(path.join("public", "index.html"))
-})
 // routes
 app.use('/api/auth', userRoutes)
 app.use('/api/projects', projectRoutes)
