@@ -3,45 +3,42 @@ import asyncHandler from 'express-async-handler'
 
 // Create a new task within a project
 export const createTaskForProjectCtrl = asyncHandler(async (req, res) => {
-        const projectId = parseInt(req.params.projectId, 10)
-        const { title, description, due_date } = req.body
-        const userId = req.userAuth
-    
-        if (!title) {
-            res.status(400).json({ error: 'Title is required' });
-            return;
-        }
-    
-        const newTask = await prisma.task.create({
-            data: {
-                title,
-                description,
-                due_date: new Date("2023-12-31").toISOString(),
-                project: {
-                    connect: { id: projectId },
-                },
-                user: {
-                    connect: { id: userId },
-                },
-            },
-        });
-    
-        res.status(201).json({
-            status: 'success',
-            message: 'Task created successfully',
-            task: newTask,
-        })
-})
+  const projectId = parseInt(req.params.projectId, 10)
+  const { title, description, due_date } = req.body
+  const userId = req.userAuth
   
+  if (!title) {
+      res.status(400).json({ error: 'Title is required' });
+      return;
+  }
+
+  const newTask = await prisma.task.create({
+      data: {
+          title,
+          description,
+          due_date: new Date("2023-12-31").toISOString(),
+          project: {
+              connect: { id: projectId },
+          },
+          user: {
+              connect: { id: userId },
+          },
+      },
+  });
+
+  res.status(201).json({
+      status: 'success',
+      message: 'Task created successfully',
+      task: newTask,
+  })
+})
+
 // Fetch all tasks for a specific project
 export const getAllTasksForProjectCtrl = asyncHandler(async (req, res) => {
   const projectId = parseInt(req.params.projectId, 10)
-  const userId = req.userAuth
-
   const tasks = await prisma.task.findMany({
     where: {
       project_id: projectId,
-      user_id: userId,
     },
   })
 
@@ -55,13 +52,10 @@ export const getAllTasksForProjectCtrl = asyncHandler(async (req, res) => {
 // Fetch a specific task by ID
 export const getTaskByIdCtrl = asyncHandler(async (req, res) => {
   const taskId = parseInt(req.params.taskId, 10);
-  const userId = req.userAuth;
-
   const task = await prisma.task.findUnique({
     where: {
       id: taskId,
-      user_id: userId, 
-    },
+    }
   })
 
   if (!task) {
@@ -79,12 +73,9 @@ export const getTaskByIdCtrl = asyncHandler(async (req, res) => {
 export const updateTaskByIdCtrl = asyncHandler(async (req, res) => {
   const taskId = parseInt(req.params.taskId, 10)
   const { title, description, due_date, completed } = req.body
-  const userId = req.userAuth
-
   const updatedTask = await prisma.task.update({
     where: {
       id: taskId,
-      user_id: userId,
     },
     data: {
       title,
@@ -104,13 +95,10 @@ export const updateTaskByIdCtrl = asyncHandler(async (req, res) => {
 // Delete a specific task by ID
 export const deleteTaskByIdCtrl = asyncHandler(async (req, res) => {
   const taskId = parseInt(req.params.taskId, 10)
-  const userId = req.userAuth
-
   const deletedTask = await prisma.task.delete({
     where: {
       id: taskId,
-      user_id: userId,
-    },
+    }
   })
 
   res.json({

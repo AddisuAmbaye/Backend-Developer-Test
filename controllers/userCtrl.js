@@ -55,12 +55,13 @@ export const registerUserCtrl = asyncHandler(async(req, res) => {
         created_at: newUser.created_at
       })
     } catch (error) {
+      console.log(error)
       res.status(500).json({ error: 'Internal Server Error' })
     }
  })
 
 export const loginUserCtrl = asyncHandler(async(req, res) => {
-  const { username, password } = req.body
+  const { username, password } = req.body 
 
   // Find the user in the database by username
   const userFound = await prisma.user.findUnique({

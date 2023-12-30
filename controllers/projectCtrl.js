@@ -1,7 +1,6 @@
 import prisma from "../config/db.js";
 import asyncHandler from 'express-async-handler'
 
-
 // Create a new project
 export const createProjectCtrl = asyncHandler(async (req, res) => {
     const { name, description } = req.body
@@ -28,7 +27,7 @@ export const createProjectCtrl = asyncHandler(async (req, res) => {
         project: newProject
     })
 })
-    
+  
 // Fetch all projects for the authenticated user
 export const getAllProjectsCtrl = asyncHandler(async (req, res) => {
     const userId = req.userAuth
@@ -45,16 +44,23 @@ export const getAllProjectsCtrl = asyncHandler(async (req, res) => {
         projects
     })
 })
+// Fetch all projects
+export const getAllProjectsAdminCtrl = asyncHandler(async (req, res) => {
+    const projects = await prisma.project.findMany();
+
+    res.json({
+        status: 'success',
+        message: 'Fetched all projects successfully',
+        projects
+    })
+})
 
 // Fetch a specific project by ID
 export const getProjectByIdCtrl = asyncHandler(async (req, res) => {
     const projectId = parseInt(req.params.projectId, 10)
-    const userId = req.userAuth
-
     const project = await prisma.project.findUnique({
         where: {
             id: projectId,
-            user_id: userId
         }
     })
 
@@ -73,12 +79,9 @@ export const getProjectByIdCtrl = asyncHandler(async (req, res) => {
 export const updateProjectByIdCtrl = asyncHandler(async (req, res) => {
     const projectId = parseInt(req.params.projectId, 10)
     const { name, description } = req.body
-    const userId = req.userAuth
-
     const updatedProject = await prisma.project.update({
         where: {
             id: projectId,
-            user_id: userId
         },
         data: {
             name,
@@ -96,12 +99,9 @@ export const updateProjectByIdCtrl = asyncHandler(async (req, res) => {
 // Delete a specific project by ID
 export const deleteProjectByIdCtrl = asyncHandler(async (req, res) => {
     const projectId = parseInt(req.params.projectId, 10)
-    const userId = req.userAuth
-
     const deletedProject = await prisma.project.delete({
         where: {
             id: projectId,
-            user_id: userId
         }
     })
 

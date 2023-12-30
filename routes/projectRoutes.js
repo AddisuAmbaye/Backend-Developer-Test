@@ -5,12 +5,14 @@ import {
     getProjectByIdCtrl,
     updateProjectByIdCtrl,
     deleteProjectByIdCtrl,
+    getAllProjectsAdminCtrl
 } from '../controllers/projectCtrl.js'
 import {
     createTaskForProjectCtrl,
     getAllTasksForProjectCtrl,
-} from '../controllers/taskCtrl.js';
+} from '../controllers/taskCtrl.js'
 import { isLoggedIn } from '../middlewares/isLoggedIn.js'
+import { isAdmin } from '../middlewares/isAdmin.js'
 import { ownsProject } from '../middlewares/authMiddleware.js'
 
 const projectRouter = express.Router()
@@ -19,9 +21,12 @@ const projectRouter = express.Router()
 projectRouter.post('/', isLoggedIn, createProjectCtrl)
 
 // Fetch all projects for the authenticated user
-projectRouter.get('/', isLoggedIn, ownsProject, getAllProjectsCtrl)
+projectRouter.get('/', isLoggedIn, getAllProjectsCtrl)
+ 
+// Fetch all projects 
+projectRouter.get('/all', isLoggedIn, isAdmin, getAllProjectsAdminCtrl)
 
-// Fetch a specific project by ID
+// Fetch a specific project by ID 
 projectRouter.get('/:projectId', isLoggedIn, ownsProject, getProjectByIdCtrl)
 
 // Update a specific project by ID
