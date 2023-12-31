@@ -17,7 +17,7 @@ export const ownsTask = asyncHandler(async (req, res, next) => {
         }
       })
       
-    if (userOwnsTask || user?.isAdmin) {
+    if (user?.isAdmin || userOwnsTask) {
         next() // User owns the task or is an admin, proceed to the next middleware or route
     } else {
         res.status(403).json({ error: 'Permission denied' }) // User does not own the task
@@ -39,8 +39,7 @@ export const ownsProject = asyncHandler(async (req, res, next) => {
           user_id: userId,
         }
       })
-
-    if (userOwnsProject || user?.isAdmin) {
+    if (user?.isAdmin || userOwnsProject) {
         next() // User owns the project or is an admin, proceed to the next middleware or route
     } else {
         res.status(403).json({ error: 'Permission denied' }) // User does not own the project

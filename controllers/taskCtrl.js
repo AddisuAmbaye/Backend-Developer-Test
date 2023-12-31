@@ -6,7 +6,7 @@ export const createTaskForProjectCtrl = asyncHandler(async (req, res) => {
   const projectId = parseInt(req.params.projectId, 10)
   const { title, description, due_date } = req.body
   const userId = req.userAuth
-  
+
   if (!title) {
       res.status(400).json({ error: 'Title is required' });
       return;
@@ -80,7 +80,7 @@ export const updateTaskByIdCtrl = asyncHandler(async (req, res) => {
     data: {
       title,
       description,
-      due_date,
+      due_date: new Date("2023-12-31").toISOString(),
       completed,
     },
   })
